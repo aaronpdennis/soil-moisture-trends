@@ -257,19 +257,28 @@ var svgTerrain = d3.select("#terrain")
 				
 			// Looping through each ecoregion...
 			for(var j = 0; j < json.features.length; j++) {
+				
+				// Pick out the ecoregion we're working with
 				var jsonEcoregion = json.features[j].properties.NA_L3NAME;
 				
+				// Declare variables to tally sum and number of noDataDates
 				var sum = 0;
+				var noDataDates = 0;
 				
+				// For each date...
 				for(var i = min; i <= max; i++) {
 				
 					// Do the following for each ecoregion...
-					sum += parseFloat(data[i][jsonEcoregion]);
+					if (data[i][jsonEcoregion] == "NA") { // If there's no data, add 1 to noDataDates
+						noDataDates += 1;
+					} else { // Else, sum it
+						sum += parseFloat(data[i][jsonEcoregion]);
+					};
 					
 				}; // END looping through each day in rangeSlider bounds
 				
-				var mean = sum / (max - min);
-				console.log(mean);
+				// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum)
+				var mean = sum / ((max - min) - noDataDates);
 				
 				// Assign a new value for each ecoregion
 				json.features[j].properties.value = mean;
