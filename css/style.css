@@ -11,13 +11,14 @@ p {
 }
 
 #ecoregions {
-	position: absolute;
-	height: 600;
-	width: 960;
+	height: 600px;
+	width: 960px;
+	background: url('/hillshade.png');
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
-img {
-	position: absolute;
-	opacity: 0.5;
+svg {
 	mix-blend-mode: multiply;
+	opacity: 0.7;
 }
