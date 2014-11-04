@@ -21,11 +21,3 @@ p {
 			stroke-width: 0;
 			stroke-linejoin: round;
 		}
-		
-		#ecoregions {
-			position: absolute;
-		}
-		
-		#terrain {
-			position: absolute;
-		}

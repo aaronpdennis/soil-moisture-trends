@@ -53,13 +53,6 @@ var svgEcoregions = d3.select("#ecoregions")
 			.attr("width", w)
 			.attr("height", h);
 
-//Create SVG element for Terrain
-var svgTerrain = d3.select("#terrain")
-		.append("svg")
-		.attr("class", "map")
-		.attr("width", w)
-		.attr("height", h);
-
  
  ////////// Soil Moisture CSV //////////
 
@@ -216,18 +209,13 @@ var svgTerrain = d3.select("#terrain")
   			calculateMeans();
 			recolorMap();
 		});
+	
 		
-	}); // END level 3 ecoregion boundaries
+		
+	//////Land that basemap and bring the terrain//////////
+	d3.json("land.json", function(error, land) {
 	
-}); // END ecoregion daily means data
-
-
-////////// Base Map //////////
-
-//Land that basemap and bring the terrain
-d3.json("land.json", function(error, land) {
-	
-	var defs = svgTerrain.append("defs");
+		var defs = svgEcoregions.append("defs");
 
 	//Bring in the land
 	defs.append("path")
@@ -236,31 +224,34 @@ d3.json("land.json", function(error, land) {
 		.attr("d", path);
 	
 	// Applying a multiply filter TODO
-	/*
+	
 	var filter = defs.append("filter")
 		.attr("id", "Multiply");
 	
 	filter.append("feBlend")
 	.attr("mode", "multiply")
-		.attr("in2", "BackgroundImage")
-		.attr("in", "SourceGraphic");
-	//*/
+	//.attr("in2", "BackgroundImage")
+	//.attr("in", "SourceGraphic")
+	;
 
 	//Identify a clipping path
-	svgTerrain.append("clipPath")
+	svgEcoregions.append("clipPath")
 		.attr("id", "clip")
 		.append("use")
 		.attr("xlink:href", "#land");
 
 	//Overlay terrain
-	svgTerrain.append("image")
+	svgEcoregions.append("image")
 		.attr("clip-path", "url(#clip)")
 		.attr("xlink:href", "hillshade.png")
 		.attr("width", w)
 		.attr("height", h)
 		.attr("opacity", 0.4).attr("comp-op","multiply");
 
-	svgTerrain.append("use")
+	svgEcoregions.append("use")
 		.attr("xlink:href", "#land");
-}); // END base map
-//*/
+		}); // END base map
+	
+	}); // END level 3 ecoregion boundaries
+	
+}); // END ecoregion daily means data
