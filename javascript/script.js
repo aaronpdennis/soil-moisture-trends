@@ -212,44 +212,46 @@ var svgEcoregions = d3.select("#ecoregions")
 	
 		
 		
-	//////Land that basemap and bring the terrain//////////
-	d3.json("land.json", function(error, land) {
+		////////// Basemap //////////
+		
+		d3.json("land.json", function(error, land) {
 	
-		var defs = svgEcoregions.append("defs");
-
-	//Bring in the land
-	defs.append("path")
-		.datum(topojson.feature(land, land.objects.land))
-		.attr("id", "land")
-		.attr("d", path);
+			var defs = svgEcoregions.append("defs");
 	
-	// Applying a multiply filter TODO
+			//Bring in the land
+			defs.append("path")
+				.datum(topojson.feature(land, land.objects.land))
+				.attr("id", "land")
+				.attr("d", path);
+		
+			// Applying a multiply filter TODO
+		
+			var filter = defs.append("filter")
+				.attr("id", "Multiply");
+		
+			filter.append("feBlend")
+				.attr("mode", "multiply")
+				//.attr("in2", "BackgroundImage")
+				//.attr("in", "SourceGraphic")
+				;
 	
-	var filter = defs.append("filter")
-		.attr("id", "Multiply");
+			//Identify a clipping path
+			svgEcoregions.append("clipPath")
+				.attr("id", "clip")
+				.append("use")
+				.attr("xlink:href", "#land");
 	
-	filter.append("feBlend")
-	.attr("mode", "multiply")
-	//.attr("in2", "BackgroundImage")
-	//.attr("in", "SourceGraphic")
-	;
+			//Overlay terrain
+			svgEcoregions.append("image")
+				.attr("clip-path", "url(#clip)")
+				.attr("xlink:href", "hillshade.png")
+				.attr("width", w)
+				.attr("height", h)
+				.attr("opacity", 0.4).attr("comp-op","multiply");
+	
+			svgEcoregions.append("use")
+				.attr("xlink:href", "#land");
 
-	//Identify a clipping path
-	svgEcoregions.append("clipPath")
-		.attr("id", "clip")
-		.append("use")
-		.attr("xlink:href", "#land");
-
-	//Overlay terrain
-	svgEcoregions.append("image")
-		.attr("clip-path", "url(#clip)")
-		.attr("xlink:href", "hillshade.png")
-		.attr("width", w)
-		.attr("height", h)
-		.attr("opacity", 0.4).attr("comp-op","multiply");
-
-	svgEcoregions.append("use")
-		.attr("xlink:href", "#land");
 		}); // END base map
 	
 	}); // END level 3 ecoregion boundaries
