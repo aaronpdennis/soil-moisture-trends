@@ -213,7 +213,7 @@ var svgEcoregions = d3.select("#ecoregions")
 		
 		
 		////////// Basemap //////////
-		
+		/*
 		d3.json("land.json", function(error, land) {
 	
 			var defs = svgEcoregions.append("defs");
@@ -251,9 +251,9 @@ var svgEcoregions = d3.select("#ecoregions")
 	
 			svgEcoregions.append("use")
 				.attr("xlink:href", "#land");
-
+			
 		}); // END base map
-	
+		//*/
 	}); // END level 3 ecoregion boundaries
 	
 }); // END ecoregion daily means data
