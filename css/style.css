@@ -13,12 +13,14 @@ p {
 #ecoregions {
 	height: 600px;
 	width: 960px;
-	background: url('/hillshade.png');
+	/*background: url('/hillshade.png');
 	background-repeat: no-repeat;
-	background-size: contain;
+	background-size: contain;*/
 }
 
+/*
 svg {
 	mix-blend-mode: multiply;
 	opacity: 0.7;
 }
+*/
