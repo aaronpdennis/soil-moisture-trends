@@ -137,17 +137,6 @@ var ecoregionList = d3.select("#list").select("table");
 				d3.select("#sliderDate").text("Date: " + data[sliderValue].date);
 			};
 		
-		// Call refreshMap function with new sliderValue as parameter on slide
-		$(function() {
-			$('#slider').slider({ 	min: 0,
-						max: data.length,
-						slide: function( event, ui ) {
-							var sliderValue = ui.value;
-							refreshMap(sliderValue);
-						} 
-			});
-		});
-		
 		// Utilize rangeSlider to dynamically calculate averages and then recolor map
 		
 		function calculateMeans() {
@@ -207,32 +196,51 @@ var ecoregionList = d3.select("#list").select("table");
 						});
 		}; // END recolorMap function
 		
+		
+		////////// Table /////////
+		
+		var fillTable = function() {
+			
+			d3.select("tbody").remove();
+			
+			var matrix = [];
+			
+			for(var j = 0; j < json.features.length; j++) {
+				matrix.push([json.features[j].properties.NA_L3NAME, json.features[j].properties.value]);
+			};
+			
+			var tr = d3.select("table").append("tbody").selectAll("tr")
+				.data(matrix)
+				.enter().append("tr");
+		
+			var td = tr.selectAll("td")
+					.data(function(d) { return d; })
+					.enter().append("td")
+					.text(function(d) { return d; });
+		};
+		
+		fillTable();
+		
+		
+		////////// Slider Movement //////////
+		
+		// Call refreshMap function with new sliderValue as parameter on slide
+		$(function() {
+			$('#slider').slider({ 	min: 0,
+						max: data.length,
+						slide: function( event, ui ) {
+							var sliderValue = ui.value;
+							refreshMap(sliderValue);
+							fillTable();
+						} 
+			});
+		});
+		
 		$("#rangeSlider").bind("valuesChanging", function(e){
   			calculateMeans();
 			recolorMap();
+			fillTable();
 		});
-	
-		
-		
-		////////// Table /////////
-		console.log(json.features);
-		
-		var matrix = [];
-		
-		for(var j = 0; j < json.features.length; j++) {
-			matrix.push([json.features[j].properties.NA_L3NAME, json.features[j].properties.value]);
-		};
-		
-		console.log(matrix)
-
-		var tr = d3.select("tbody").selectAll("tr")
-			.data(matrix)
-			.enter().append("tr");
-
-		var td = tr.selectAll("td")
-				.data(function(d) { return d; })
-				.enter().append("td")
-				.text(function(d) { return d; });
 		
 	}); // END level 3 ecoregion boundaries
 	
