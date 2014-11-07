@@ -214,20 +214,7 @@ var ecoregionList = d3.select("#list").select("table");
 	
 		
 		
-		////////// List /////////
-		/*
-		var ecoregionTableRows = ecoregionList.selectAll("tr")
-				.data(json.features)
-				.enter()
-				.append("tr")
-				.append("td")
-				.text(function(d) { return d.NA_L3NAME; });
-		
-				
-		
-		ecoregionTableRows.sort(function(d) {return d.properties.value;}).style("color", function(d) {return color(d.properties.value)});
-		
-		*/////
+		////////// Table /////////
 		console.log(json.features);
 		
 		var matrix = [];

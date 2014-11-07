@@ -18,6 +18,11 @@ p {
 	background-size: contain;*/
 }
 
+#list{
+	height: 600px;
+	overflow-y: scroll;
+}
+
 /*
 svg {
 	mix-blend-mode: multiply;
