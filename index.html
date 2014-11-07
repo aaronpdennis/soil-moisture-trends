@@ -29,7 +29,7 @@
 			
 			<div id="title-row" class="row-fluid">
 				
-				<div id="title" class="span12">
+				<div id="title" class="col-md-12">
 					<h1>Soil Moisture by Level 3 Ecoregion</h1>
 					<h3>Change these sliders to update the map...</h3>
 				</div>
@@ -37,14 +37,24 @@
 			</div>
 			
 			<div id="map-and-list" class="row-fluid">
-				<div id='ecoregions' class="span8"></div>
-				<div id='list' class"span4"></div>
+				<div id='ecoregions' class="col-md-8"></div>
+				<div id='list' class"col-md-4">
+					<table class="table-condensed table-striped table-hover">
+						<thead>
+							<th>Ecoregion</th>
+							<th>Average Soil Moisture</th>
+							<th>Standard Error</th>
+						</thead>
+						<tbody></tbody>
+					</table>
+					<h2>Ecoregion Name</h2>
+				</table>
 			
 			</div>
 			
 			<div id="bottom-row" class="row-fluid">
 				
-				<div id="slider" class="span8">
+				<div id="slider" class="col-md-8">
 					
 					<div class="row-fluid">
 						
@@ -63,7 +73,7 @@
 					
 				</div>
 				
-				<div id="focus-ecoregion" class="span4">
+				<div id="focus-ecoregion" class="col-md-4">
 					
 				</div>
 				

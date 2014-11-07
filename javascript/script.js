@@ -53,7 +53,9 @@ var svgEcoregions = d3.select("#ecoregions")
 			.attr("width", w)
 			.attr("height", h);
 
- 
+////////// List Poperties //////////
+var ecoregionList = d3.select("#list").select("table");
+
  ////////// Soil Moisture CSV //////////
 
  // Read in ecoregion daily means as var data
@@ -212,48 +214,39 @@ var svgEcoregions = d3.select("#ecoregions")
 	
 		
 		
-		////////// Basemap //////////
+		////////// List /////////
 		/*
-		d3.json("land.json", function(error, land) {
-	
-			var defs = svgEcoregions.append("defs");
-	
-			//Bring in the land
-			defs.append("path")
-				.datum(topojson.feature(land, land.objects.land))
-				.attr("id", "land")
-				.attr("d", path);
+		var ecoregionTableRows = ecoregionList.selectAll("tr")
+				.data(json.features)
+				.enter()
+				.append("tr")
+				.append("td")
+				.text(function(d) { return d.NA_L3NAME; });
 		
-			// Applying a multiply filter TODO
+				
 		
-			var filter = defs.append("filter")
-				.attr("id", "Multiply");
+		ecoregionTableRows.sort(function(d) {return d.properties.value;}).style("color", function(d) {return color(d.properties.value)});
 		
-			filter.append("feBlend")
-				.attr("mode", "multiply")
-				//.attr("in2", "BackgroundImage")
-				//.attr("in", "SourceGraphic")
-				;
-	
-			//Identify a clipping path
-			svgEcoregions.append("clipPath")
-				.attr("id", "clip")
-				.append("use")
-				.attr("xlink:href", "#land");
-	
-			//Overlay terrain
-			svgEcoregions.append("image")
-				.attr("clip-path", "url(#clip)")
-				.attr("xlink:href", "hillshade.png")
-				.attr("width", w)
-				.attr("height", h)
-				.attr("opacity", 0.4).attr("comp-op","multiply");
-	
-			svgEcoregions.append("use")
-				.attr("xlink:href", "#land");
-			
-		}); // END base map
-		//*/
+		*/////
+		console.log(json.features);
+		
+		var matrix = [];
+		
+		for(var j = 0; j < json.features.length; j++) {
+			matrix.push([json.features[j].properties.NA_L3NAME, json.features[j].properties.value]);
+		};
+		
+		console.log(matrix)
+
+		var tr = d3.select("tbody").selectAll("tr")
+			.data(matrix)
+			.enter().append("tr");
+
+		var td = tr.selectAll("td")
+				.data(function(d) { return d; })
+				.enter().append("td")
+				.text(function(d) { return d; });
+		
 	}); // END level 3 ecoregion boundaries
 	
 }); // END ecoregion daily means data
