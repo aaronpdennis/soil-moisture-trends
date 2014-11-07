@@ -16,7 +16,7 @@ p {
 	/*background: url('/hillshade.png');
 	background-repeat: no-repeat;
 	background-size: contain;*/
-}
+} 
 
 #list{
 	height: 600px;
@@ -27,5 +27,4 @@ p {
 svg {
 	mix-blend-mode: multiply;
 	opacity: 0.7;
-}
-*/
+}*/

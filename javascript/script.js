@@ -94,7 +94,7 @@ var ecoregionList = d3.select("#list").select("table");
 			};
 			
 			// Bind data and create one path per GeoJSON feature
-			svgEcoregions.selectAll("path")
+			var ecoregionPolygons = svgEcoregions.selectAll("path")
 				.data(json.features)
 				.enter()
 				.append("path")
@@ -108,7 +108,18 @@ var ecoregionList = d3.select("#list").select("table");
 							}
 				})
 				.style("stroke", "white")
-				.style("stroke-width", "1");
+				.style("stroke-width", "1")
+				.on("mouseenter", function() {d3.select(this).style("fill", "pink").style("stroke", "red")})
+				.on("mouseout", function() {d3.select(this).style("fill", function(d) {
+					var value = d.properties.value;
+							if (value) {
+								return color(value);
+							} else {
+								return "#ccc";
+							}
+							})
+						.style("stroke", "white")
+					});
 			
 			// Define function to redraw ecoregion thematic data and update date based on parameter sliderValue
 			function refreshMap(sliderValue) {
@@ -224,7 +235,7 @@ var ecoregionList = d3.select("#list").select("table");
 		
 		////////// Slider Movement //////////
 		
-		// Call refreshMap function with new sliderValue as parameter on slide
+		// Refresh map and table with new sliderValue on slide
 		$(function() {
 			$('#slider').slider({ 	min: 0,
 						max: data.length,
@@ -236,6 +247,7 @@ var ecoregionList = d3.select("#list").select("table");
 			});
 		});
 		
+		// Calculate means and refesh map and table when data changing
 		$("#rangeSlider").bind("valuesChanging", function(e){
   			calculateMeans();
 			recolorMap();
