@@ -4,19 +4,18 @@
 }
 
 .top {
-	stroke: white;
-	stroke-width: 1;
+	stroke: #FF4CF0;
+	stroke-width: 1.5;
 }
 
 .selected {
-	stroke: white;
-	stroke-width: 2;
+	stroke: #FF00E9;
+	stroke-width: 2.5;
 }
 
 .tl { position: absolute; top: 0; left: 0; right: 40%; bottom: 30%; background: gray; border:solid #000; border-width: 0 3px 3px 0; }
 .tr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; background: #fff; border:solid #000; border-width: 0 0 3px 0; }
-.bl { position: absolute; top: 70%; left: 0; right: 30%; bottom: 0; background: #eff; border:solid #000; border-width: 0 3px 0 0; }
-.br { position: absolute; top: 70%; left: 70%; right: 0; bottom: 0; background: #fef; } 
+.b { position: absolute; top: 70%; left: 0; right: 0%; bottom: 0; background: #eff; }
 
 #map {
 	padding: 10px;
@@ -25,6 +24,25 @@
 #list{
 	height: 70%;
 	overflow-y: scroll;
+}
+
+path { 
+    stroke: #FF00E9;
+    stroke-width: 1.5;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 /*
 p {

@@ -1,3 +1,5 @@
+////////// MAP SETUP //////////
+
 // Set up margin and widths of map container
 var margin = {top: 10, left: 10, bottom: 10, right: 10}
 	, width = document.getElementById("map").clientWidth
@@ -41,6 +43,42 @@ var color = d3.scale.linear()
 		.range([colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]])
 		.interpolate(d3.interpolateHcl);
 
+
+
+////////// GRAPH SETUP //////////
+
+var marginGraph = {top: 10, right: 10, bottom: 30, left: 40},
+	widthGraph = document.getElementById("graph").clientWidth - marginGraph.left - marginGraph.right,
+	heightGraph = document.getElementById("graph").clientHeight - marginGraph.top - marginGraph.bottom;
+
+var parseDate = d3.time.format("%b%d%Y").parse;
+
+var xGraph = d3.time.scale().range([0, widthGraph]),
+	yGraph = d3.scale.linear().range([heightGraph, 0]);
+
+var xAxis = d3.svg.axis().scale(xGraph).orient("bottom"),
+	yAxis = d3.svg.axis().scale(yGraph).orient("left");
+
+	/*
+var brush = d3.svg.brush()
+				.x(xGraph)
+				.on("brush", brushed);*/
+
+var lineGraph = d3.svg.line()
+			.x(function(d) { return xGraph(d.date); })
+			.y(function(d) { return yGraph(d["Piedmont"]); });
+
+var svgGraph = d3.select("#graph").append("svg")
+				.attr("width", widthGraph + marginGraph.left + marginGraph.right)
+				.attr("height", heightGraph + marginGraph.top + marginGraph.bottom)
+				.append("g")
+				.attr("transform", "translate(" + marginGraph.left + "," + marginGraph.right + ")");
+
+
+
+
+////////// DATA SETUP //////////
+
 // Load in data
 queue()
 	.defer(d3.csv, "ecoregionMeans.csv")
@@ -63,8 +101,8 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	function bindData() {
 		
 		// Min and max indexes of dates
-		var min = 10;
-		var max = 50;
+		var min = 0;
+		var max = 7;
 		
 		// Looping through each ecoregion...
 		for(var j = 0; j < ecoregions.geometries.length; j++) {
@@ -97,6 +135,10 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		}; // END looping through each ecoregion
 	};
 	
+	
+	
+	////////// MAP //////////
+	
 	// Awesome! I smell a map coming...
 	drawMap();
 	function drawMap() {
@@ -106,12 +148,13 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 		// Draw choropleth
 		g.selectAll("path")
-		    .data(topojson.feature(ecoregionBoundaries, ecoregions).features)
+			.data(topojson.feature(ecoregionBoundaries, ecoregions).features)
 		.enter()
-		    .append("path")
-		    .attr("class", "ecoregionPolygons")
-		       .attr("d", path)
-		    .style("fill", function(d) {
+			.append("path")
+			.attr("class", "ecoregionPolygons")
+			.attr("d", path)
+			.attr("id", function(d) { return d.properties.NA_L3NAME})
+			.style("fill", function(d) {
 								var value = d.properties.value;
 								if (value) {
 									return color(value);
@@ -144,44 +187,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		ecoregionPaths.attr("d", path);
 	};
 	
-	// Ecoregion polygons
-	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
-	
-	// Highlight hovered ecoregion and move it to top of drawing order, classed as .top
-	ecoregionPaths.on("mouseover", function(d,i) {
-		ecoregionPaths.classed("top", false);
-    	d3.select(this.parentNode.appendChild(this))
-			.classed("top", true);
-		var selectedEcoregionElement = document.getElementsByClassName("selected");
-		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
-	});
-	
-	// Remove highlight when mouse moves out
-	ecoregionPaths.on("mouseout", function(d,i) {
-		ecoregionPaths.classed("top", false);
-	});
-	
-	// STILL A PROBLEM SPOT
-	var keydown = false;
-	d3.select(document).on("keydown", function() {var keydown = true; console.log(keydown);});
-	d3.select(document).on("keyup", function() {var keydown = false; console.log(keydown);});
-	
-	// On click, class the clicked on ecoregion as .selected, highlight it, move it to the top
-	ecoregionPaths.on("click", function() {
-		
-		if (keydown == false) {
-			ecoregionPaths.classed("selected", false);
-			d3.select(this).classed("selected", true);
-		} else {
-			d3.select(this).classed("selected", true);
-		};
-		
-		d3.select(this.parentNode.appendChild(this))
-			.classed("top", true);
-		var selectedEcoregionElement = document.getElementsByClassName("selected");
-		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
-		
-	}); // select multiple on keydown not working yet...
+	////////// TABLE //////////
 	
 	// Fill a table with our data
 	fillTable();
@@ -224,5 +230,85 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 				.data(function(d) { return d; })
 				.enter().append("td")
 				.text(function(d) { return d; });
+	};
+	
+	
+	
+	////////// GRAPH //////////
+	ecoregionMeans.forEach(function(d) {
+		d.date = parseDate(d.date);
+	});
+	
+	xGraph.domain(d3.extent(ecoregionMeans, function(d) { return d.date; }));
+	yGraph.domain([5, 35]);
+	
+	svgGraph.append("g")
+		.attr("class", "y axis")
+		.call(yAxis);
+	
+	svgGraph.append("g")
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + heightGraph + ")")
+		.call(xAxis);
+	
+	svgGraph.append("path")
+		.datum(ecoregionMeans)
+		.attr("class", "line")
+		.attr("d", lineGraph);
+	
+	console.log(ecoregionMeans[3].date)
+	
+	
+	
+	////////// INTERACTIVITY //////////
+	
+	// Ecoregion polygons
+	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
+	
+	// Highlight hovered ecoregion and move it to top of drawing order, classed as .top
+	ecoregionPaths.on("mouseover", function(d,i) {
+		ecoregionPaths.classed("top", false);
+    	d3.select(this.parentNode.appendChild(this))
+			.classed("top", true);
+		var selectedEcoregionElement = document.getElementsByClassName("selected");
+		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
+	});
+	
+	// Remove highlight when mouse moves out
+	ecoregionPaths.on("mouseout", function(d,i) {
+		ecoregionPaths.classed("top", false);
+	});
+	
+	// STILL A PROBLEM SPOT
+	var keydown = false;
+	d3.select(document).on("keydown", function() {var keydown = true; console.log(keydown);});
+	d3.select(document).on("keyup", function() {var keydown = false; console.log(keydown);});
+	
+	// On click, class the clicked on ecoregion as .selected, highlight it, move it to the top
+	ecoregionPaths.on("click", function() {
+		
+		if (keydown == false) {
+			ecoregionPaths.classed("selected", false);
+			d3.select(this).classed("selected", true);
+		} else {
+			d3.select(this).classed("selected", true);
 		};
+		
+		d3.select(this.parentNode.appendChild(this))
+			.classed("top", true);
+		var selectedEcoregionElement = document.getElementsByClassName("selected");
+		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
+		
+		// Get name of clicked on ecoregion
+		var selectedEcoregion = this.id;
+		console.log(selectedEcoregion);
+		
+		lineGraph.y(function(d) { return yGraph(d[selectedEcoregion]); });
+		
+		svgGraph.select(".line")
+			.transition()
+			.duration(600)
+			.attr("d", lineGraph);
+		
+	}); // select multiple on keydown not working yet...
 };
