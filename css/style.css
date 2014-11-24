@@ -13,8 +13,8 @@
 	stroke-width: 2;
 }
 
-.tl { position: absolute; top: 0; left: 0; right: 30%; bottom: 30%; background: gray; border:solid #000; border-width: 0 3px 3px 0; }
-.tr { position: absolute; top: 0; left: 70%; right: 0; bottom: 30%; background: #ffe; border:solid #000; border-width: 0 0 3px 0; }
+.tl { position: absolute; top: 0; left: 0; right: 40%; bottom: 30%; background: gray; border:solid #000; border-width: 0 3px 3px 0; }
+.tr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; background: #fff; border:solid #000; border-width: 0 0 3px 0; }
 .bl { position: absolute; top: 70%; left: 0; right: 30%; bottom: 0; background: #eff; border:solid #000; border-width: 0 3px 0 0; }
 .br { position: absolute; top: 70%; left: 70%; right: 0; bottom: 0; background: #fef; } 
 
@@ -22,12 +22,11 @@
 	padding: 10px;
 }
 
-/*
 #list{
-	height: ;
+	height: 70%;
 	overflow-y: scroll;
 }
-
+/*
 p {
 	font-size: 1.5em;
 }
