@@ -1,13 +1,15 @@
-////////// Queue Version Datasets //////////
-var width = document.getElementById("map").clientWidth - 10;
-var height = document.getElementById("map").clientHeight - 10;
+var margin = {top: 10, left: 10, bottom: 10, right: 10}
+	, width = parseInt(d3.select('#map').style('width'))
+	, width = width - margin.left - margin.right
+	, mapRatio = .5
+	, height = document.getElementById("map").clientHeight;
 
 var projection = d3.geo.albersUsa()
-    .scale(600)
+   .scale(width)
     .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
-			.projection(projection);
+	.projection(projection);
 
 var svgEcoregions = d3.select("#map")//Problem #map
 			.append("svg")
