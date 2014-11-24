@@ -97,6 +97,22 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 							});
 	};
 	
+	d3.select(window).on('resize', resize);
+	function resize() {
+		// adjust things when the window size changes
+		width = parseInt(d3.select('#map').style('width'));
+		width = width - margin.left - margin.right;
+		height = width * mapRatio;
+		
+		// update projection
+		projection
+			.translate([width / 2, height / 2])
+			.scale(width);
+		
+		svgEcoregions.selectAll("g").remove();
+		drawMap();
+	}
+	
 	
 	var ecoregionPaths = svgEcoregions.select("g").selectAll("path")
 	
