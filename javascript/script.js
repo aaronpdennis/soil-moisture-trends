@@ -1,17 +1,28 @@
 var margin = {top: 10, left: 10, bottom: 10, right: 10}
-	, width = parseInt(d3.select('#map').style('width'))
+	, width = document.getElementById("map").clientWidth
 	, width = width - margin.left - margin.right
-	, mapRatio = .5
+	, mapRatio = .6
 	, height = document.getElementById("map").clientHeight;
 
+function getsmaller() {
+	if (width > (height * 1.6)) {
+		return height *1.6;
+	} else {
+		return width;
+	}
+};
+
+var smaller = getsmaller();
+
+// update projection
 var projection = d3.geo.albersUsa()
-   .scale(width)
-    .translate([width / 2, height / 2]);
+	.translate([width / 2, height / 2 - 10])
+	.scale(smaller * 1.3);
 
 var path = d3.geo.path()
 	.projection(projection);
 
-var svgEcoregions = d3.select("#map")//Problem #map
+var svgEcoregions = d3.select("#map")
 			.append("svg")
 			.attr("width", width)
 			.attr("height", height);
@@ -100,21 +111,24 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	d3.select(window).on('resize', resize);
 	function resize() {
 		// adjust things when the window size changes
-		width = parseInt(d3.select('#map').style('width'));
+		width = document.getElementById("map").clientWidth;
 		width = width - margin.left - margin.right;
-		height = width * mapRatio;
+		height = document.getElementById("map").clientHeight;
+		
+		var smaller = getsmaller();
 		
 		// update projection
 		projection
-			.translate([width / 2, height / 2])
-			.scale(width);
+			.translate([width / 2, height / 2 - 10])
+			.scale(smaller * 1.3);
 		
-		svgEcoregions.selectAll("g").remove();
-		drawMap();
+		svgEcoregions.attr("width", width).attr("height", height);
+		
+		ecoregionPaths.attr("d", path);
 	}
 	
 	
-	var ecoregionPaths = svgEcoregions.select("g").selectAll("path")
+	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
 	
 	ecoregionPaths.on("mouseover", function(d,i) {
 		ecoregionPaths.classed("top", false);
@@ -122,6 +136,10 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.classed("top", true);
 		var selectedEcoregionElement = document.getElementsByClassName("selected");
 		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
+	});
+	
+	ecoregionPaths.on("mouseout", function(d,i) {
+		ecoregionPaths.classed("top", false);
 	});
 	
 	var keydown = false;
