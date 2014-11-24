@@ -88,8 +88,8 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 				
 			}; // END looping through each day in rangeSlider bounds
 			
-			// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum)
-			var mean = sum / ((max - min) - noDataDates);
+			// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum), rounded to two decimal places
+			var mean = Math.round((sum / ((max - min) - noDataDates)) * 100) / 100;
 			
 			// Assign a new value for each ecoregion
 			ecoregions.geometries[j].properties.value = mean;
@@ -183,21 +183,43 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 	}); // select multiple on keydown not working yet...
 	
+	// Fill a table with our data
 	fillTable();
 	function fillTable() {
 			
 		d3.select("tbody").remove();
 			
-		var matrix = [];
-			
-		for(var j = 0; j < ecoregions.geometries.length; j++) {
-			matrix.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
-		};
-			
-		var tr = d3.select("table").append("tbody").selectAll("tr")
-			.data(matrix)
-			.enter().append("tr");
+		var array = [];
 		
+		// Function to search whether obj in multidimensional array is already included
+		function include(arr,obj) {
+			for(var i = 0; i < array.length; i++) {
+				if (arr[i].indexOf(obj) != -1) {
+					var present = true;
+					break;
+				} else {
+					var present = false;
+				};
+			};
+			return present;
+		};
+		
+		// For the first object, add it to table. Check if object is in table before adding after that
+		for(var j = 0; j < ecoregions.geometries.length; j++) {
+			if (j == 0) {
+				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
+			} else if (include(array, ecoregions.geometries[j].properties.NA_L3NAME) != true) {
+				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
+			};
+		};
+		
+		// Append table row for each array in multidimensional array
+		var tr = d3.select("table").append("tbody").selectAll("tr")
+			.data(array)
+			.enter().append("tr")
+			.attr("id", function(d, i) {return array[i][0];}); // Assigning ecoregion name to id of <tr> 
+		
+		// Append table data for each value in sub-arrays
 		var td = tr.selectAll("td")
 				.data(function(d) { return d; })
 				.enter().append("td")
