@@ -8,6 +8,7 @@
 		<!--LIBRARIES-->
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
+		<script src="http://d3js.org/queue.v1.min.js"></script>
 
 		<script src="javascript/jquery-2.1.1.min.js"></script>
 		<script src="javascript/jquery-ui.min.js"></script>
@@ -25,60 +26,53 @@
 	
 	<body>
 	
-		<div class="container-fluid">
-			
-			<div id="title-row" class="row-fluid">
+		
+			<div id="title" class="col-xs-12">
+				<h1>Soil Moisture by Level 3 Ecoregion</h1>
+				<h3>Change these sliders to update the map...</h3>
+			</div>
 				
-				<div id="title" class="col-md-12">
-					<h1>Soil Moisture by Level 3 Ecoregion</h1>
-					<h3>Change these sliders to update the map...</h3>
-				</div>
 				
+			<div id='map' class="tl">
 			</div>
 			
-			<div id="map-and-list" class="row-fluid">
-				<div id='ecoregions' class="col-md-8"></div>
-				<div id='list' class="col-md-4">
-					<table class="table table-bordered table-condensed table-striped table-hover">
-						<thead>
-							<th>Ecoregion</th>
-							<th>Average Soil Moisture</th>
-							<th>Standard Error</th>
-						</thead>
-						<tbody></tbody>
-					</table>
-				</div>
+			<div id='list' class="tr">
+				<table class="table table-bordered table-condensed table-striped table-hover">
+					<thead>
+						<th>Ecoregion</th>
+						<th>Average Soil Moisture</th>
+						<th>Standard Error</th>
+					</thead>
+					<tbody></tbody>
+				</table>
 			</div>
-			
-			<div id="bottom-row" class="row-fluid">
 				
-				<div id="slider" class="col-md-8">
+				
+			<div id="slider" class="bl">
+				
+				<div class="row-fluid">
 					
-					<div class="row-fluid">
-						
-						<p>This slider will update the map with daily soil moisture levels:</p>
-						<div id='slider'></div>
-						<div id='date'>
-							<p id='sliderDate'></p>
-						</div>
-						
-					</div>
-					
-					<div class="row-fluid">
-						<p>This slider will update the map with the average soil moisture level over a range of dates:</p>
-						<div id='rangeSlider'></div>
+				<p>This slider will update the map with daily soil moisture levels:</p>
+					<div id='slider'></div>
+					<div id='date'>
+						<p id='sliderDate'></p>
 					</div>
 					
 				</div>
 				
-				<div id="focus-ecoregion" class="col-md-4">
-					
+				<div class="row-fluid">
+					<p>This slider will update the map with the average soil moisture level over a range of dates:</p>
+					<div id='rangeSlider'></div>
 				</div>
 				
 			</div>
+				
+			<div id="focus-ecoregion" class="br">
+				
+			</div>
 			
-		</div>
-
+			
+			
 	<!--Script for map-->
 	<script src="javascript/script.js"></script>
 
