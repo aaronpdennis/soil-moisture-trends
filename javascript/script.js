@@ -262,19 +262,22 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	function setMax (min) {
 		max = getBound(1);
-		if (min == max) { max += 1; }
+		if (min + 7 < max) { max += 7; }
 		return max;
 	}
 	
 	function brushed() {
 		min = getBound(0);
-		max = getBound(1);
+		max = setMax(min);
 		console.log(brush.extent()[0], brush.extent()[1]);
 		console.log(d3.time.day.floor(brush.extent()[0]), d3.time.day.floor(brush.extent()[1]));
 		console.log(min, max);
 		bindData();
 		recolorMap();
 		fillTable();
+		
+		var s = brush.extent();
+		line.classed("inRange", function(d) { return s[0] <= d && d <= s[1]; });
 	}
 	
 	function recolorMap () {
@@ -291,7 +294,6 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		});
 	}; // END recolorMap function
 	
-	console.log(ecoregionMeans)
 	
 	// Highlight hovered ecoregion and move it to top of drawing order, classed as .top
 	ecoregionPaths.on("mouseover", function(d,i) {
