@@ -116,9 +116,9 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 					noDataDates += 1;
 				} else { // Else, sum it
 					sum += parseFloat(ecoregionMeans[i][jsonEcoregion]);
-				};
+				}
 				
-			}; // END looping through each day in rangeSlider bounds
+			} // END looping through each day in rangeSlider bounds
 			
 			// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum), rounded to two decimal places
 			var mean = Math.round((sum / ((max - min) - noDataDates)) * 100) / 100;
@@ -126,8 +126,25 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			// Assign a new value for each ecoregion
 			ecoregions.geometries[j].properties.value = mean;
 			
-		}; // END looping through each ecoregion
-	};
+		} // END looping through each ecoregion
+	}
+	
+	function bindSingleDayData() {
+		// Looping through each ecoregion...
+		for(var j = 0; j < ecoregions.geometries.length; j++) {
+			
+			// Pick out the ecoregion we're working with
+			var jsonEcoregion = ecoregions.geometries[j].properties.NA_L3NAME;
+			
+			level += parseFloat(ecoregionMeans[min][jsonEcoregion]);
+			
+			// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum), rounded to two decimal places
+			var level = Math.round(level * 100) / 100;
+			
+			// Assign a new value for each ecoregion
+			ecoregions.geometries[j].properties.value = level;
+			}
+	}
 	
 	
 	
@@ -170,27 +187,9 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			
 		var array = [];
 		
-		/*
-		// Function to search whether obj in multidimensional array is already included
-		function include(arr,obj) {
-			for(var i = 0; i < array.length; i++) {
-				if (arr[i].indexOf(obj) != -1) {
-					var present = true;
-					break;
-				} else {
-					var present = false;
-				};
-			};
-			return present;
-		};*/
-		
 		// For the first object, add it to table. Check if object is in table before adding after that
 		for(var j = 0; j < ecoregions.geometries.length; j++) {
-			/*if (j == 0) {
-				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
-			} else if (include(array, ecoregions.geometries[j].properties.NA_L3NAME) != true) {*/
-				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
-			//};
+			array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
 		};
 		
 		// Append table row for each array in multidimensional array
@@ -260,24 +259,21 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		}
 	}
 	
-	function setMax (min) {
-		max = getBound(1);
-		if (min + 7 < max) { max += 7; }
-		return max;
-	}
-	
 	function brushed() {
 		min = getBound(0);
-		max = setMax(min);
+		max = getBound(1);
 		console.log(brush.extent()[0], brush.extent()[1]);
 		console.log(d3.time.day.floor(brush.extent()[0]), d3.time.day.floor(brush.extent()[1]));
 		console.log(min, max);
-		bindData();
+		
+		if (min == max) {
+			bindSingleDayData();
+		} else {
+			bindData();
+		}
+		
 		recolorMap();
 		fillTable();
-		
-		var s = brush.extent();
-		line.classed("inRange", function(d) { return s[0] <= d && d <= s[1]; });
 	}
 	
 	function recolorMap () {
