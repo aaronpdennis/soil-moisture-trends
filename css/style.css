@@ -15,7 +15,15 @@
 
 .tl { position: absolute; top: 0; left: 0; right: 40%; bottom: 30%; background: gray; border:solid #000; border-width: 0 3px 3px 0; }
 .tr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; background: #fff; border:solid #000; border-width: 0 0 3px 0; }
-.b { position: absolute; top: 70%; left: 0; right: 0%; bottom: 0; background: #eff; }
+.b { position: absolute; top: 70%; left: 0; right: 0%; bottom: 0; background: #eee; }
+h2 { 
+	position: absolute; 
+	right: 10%;
+	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+	font-size: 2em;
+	color: #888;
+	
+}
 
 #map {
 	padding: 10px;

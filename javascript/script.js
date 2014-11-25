@@ -158,12 +158,6 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 							});
 	};
 	
-	function colorMap() {
-		g.selectAll("path").select("path")
-			.attr("d", path)
-			
-	};
-	
 	
 	
 	////////// TABLE //////////
@@ -176,6 +170,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			
 		var array = [];
 		
+		/*
 		// Function to search whether obj in multidimensional array is already included
 		function include(arr,obj) {
 			for(var i = 0; i < array.length; i++) {
@@ -187,15 +182,15 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 				};
 			};
 			return present;
-		};
+		};*/
 		
 		// For the first object, add it to table. Check if object is in table before adding after that
 		for(var j = 0; j < ecoregions.geometries.length; j++) {
-			if (j == 0) {
+			/*if (j == 0) {
 				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
-			} else if (include(array, ecoregions.geometries[j].properties.NA_L3NAME) != true) {
+			} else if (include(array, ecoregions.geometries[j].properties.NA_L3NAME) != true) {*/
 				array.push([ecoregions.geometries[j].properties.NA_L3NAME, ecoregions.geometries[j].properties.value]);
-			};
+			//};
 		};
 		
 		// Append table row for each array in multidimensional array
@@ -248,6 +243,9 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	////////// INTERACTIVITY //////////
 	
+	// Ecoregion polygons
+	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
+	
 	// Brush for coloring map by calculated averages
 	var xGraphIndex = d3.scale.linear().range([0, ecoregionMeans.length - 1]);
 	brush.on("brush", brushed);
@@ -262,6 +260,12 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		}
 	}
 	
+	function setMax (min) {
+		max = getBound(1);
+		if (min == max) { max += 1; }
+		return max;
+	}
+	
 	function brushed() {
 		min = getBound(0);
 		max = getBound(1);
@@ -269,13 +273,24 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		console.log(d3.time.day.floor(brush.extent()[0]), d3.time.day.floor(brush.extent()[1]));
 		console.log(min, max);
 		bindData();
-		drawMap();
-	};
+		recolorMap();
+	}
+	
+	function recolorMap () {
+			ecoregionPaths
+					.transition()
+					.duration(30)
+					.style("fill", function(d) {
+						var value = d.properties.value;
+						if (value) {
+							return color(value);
+							} else {
+								return "#ccc";
+							}
+		});
+	}; // END recolorMap function
 	
 	console.log(ecoregionMeans)
-	
-	// Ecoregion polygons
-	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
 	
 	// Highlight hovered ecoregion and move it to top of drawing order, classed as .top
 	ecoregionPaths.on("mouseover", function(d,i) {
@@ -313,6 +328,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 		// Get name of clicked on ecoregion
 		var selectedEcoregion = this.id;
+		d3.select("#ecoregionName").select("h2").text(selectedEcoregion);
 		console.log(selectedEcoregion);
 		
 		lineGraph.y(function(d) { return yGraph(d[selectedEcoregion]); });
@@ -329,9 +345,9 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	////////// RESPONSIVENESS //////////
 	
 	// Resize map when window resizes
-	d3.select(window).on('resize', resizeMap);
-	function resizeMap() {
-		// Adjust things when the window size changes
+	d3.select(window).on('resize', resizeElements);
+	function resizeElements() {
+		// Adjust map when the window size changes
 		width = document.getElementById("map").clientWidth;
 		width = width - margin.left - margin.right;
 		height = document.getElementById("map").clientHeight;
@@ -349,12 +365,8 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 		// Redrawing the paths
 		ecoregionPaths.attr("d", path);
-	};
-	
-	// Resize graph when window resizes
-	d3.select(window).on('resize', resizeGraph);
-	function resizeGraph() {
-		// Adjust things when the window size changes
+		
+		// Adjust graph when the window size changes
 		widthGraph = document.getElementById("graph").clientWidth - marginGraph.left - marginGraph.right;
 		heightGraph = document.getElementById("graph").clientHeight - marginGraph.top - marginGraph.bottom;
 		
@@ -373,5 +385,23 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.attr("height", heightGraph + marginGraph.top + marginGraph.bottom)
 			.append("g")
 			.attr("transform", "translate(" + marginGraph.left + "," + marginGraph.right + ")");
-	};//*/
+		
+		svgGraph
+			.select(".y axis")
+			.call(yAxis);
+	
+		svgGraph
+			.select( ".x axis")
+			.attr("transform", "translate(0," + heightGraph + ")")
+			.call(xAxis);
+	
+		svgGraph
+			.select(".line")
+			.attr("d", lineGraph);
+	
+		svgGraph.select(".x brush")
+			.call(brush)
+			.selectAll("rect")
+			.attr("height", heightGraph);
+	};
 };
