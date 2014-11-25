@@ -274,6 +274,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		console.log(min, max);
 		bindData();
 		recolorMap();
+		fillTable();
 	}
 	
 	function recolorMap () {
