@@ -26,6 +26,9 @@
 	overflow-y: scroll;
 }
 
+
+/* GRAPH */
+
 path { 
     stroke: #FF00E9;
     stroke-width: 1.5;

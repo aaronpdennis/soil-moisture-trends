@@ -59,14 +59,9 @@ var xGraph = d3.time.scale().range([0, widthGraph]),
 var xAxis = d3.svg.axis().scale(xGraph).orient("bottom"),
 	yAxis = d3.svg.axis().scale(yGraph).orient("left");
 
-	/*
-var brush = d3.svg.brush()
-				.x(xGraph)
-				.on("brush", brushed);*/
-
 var lineGraph = d3.svg.line()
-			.x(function(d) { return xGraph(d.date); })
-			.y(function(d) { return yGraph(d["Piedmont"]); });
+		.x(function(d) { return xGraph(d.date); })
+		.y(heightGraph);
 
 var svgGraph = d3.select("#graph").append("svg")
 				.attr("width", widthGraph + marginGraph.left + marginGraph.right)
@@ -74,8 +69,7 @@ var svgGraph = d3.select("#graph").append("svg")
 				.append("g")
 				.attr("transform", "translate(" + marginGraph.left + "," + marginGraph.right + ")");
 
-
-
+var brush = d3.svg.brush().x(xGraph);
 
 ////////// DATA SETUP //////////
 
@@ -96,13 +90,13 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	var ecoregions = ecoregionBoundaries.objects.level3ecoregions;
 	console.log(ecoregions.geometries.length);
 	
+	// Min and max indexes of dates for calculations
+	var min = 0;
+	var max = ecoregionMeans.length - 1;
+	
 	// Going strong. Lets bind some data
 	bindData();
 	function bindData() {
-		
-		// Min and max indexes of dates
-		var min = 0;
-		var max = 7;
 		
 		// Looping through each ecoregion...
 		for(var j = 0; j < ecoregions.geometries.length; j++) {
@@ -164,28 +158,13 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 							});
 	};
 	
-	// Resize map when window resizes
-	d3.select(window).on('resize', resize);
-	function resize() {
-		// Adjust things when the window size changes
-		width = document.getElementById("map").clientWidth;
-		width = width - margin.left - margin.right;
-		height = document.getElementById("map").clientHeight;
-		
-		// Find the smaller dimension, considering the map ratio
-		var smaller = getsmaller();
-		
-		// Update projection
-		projection
-			.translate([width / 2, height / 2 - 10])
-			.scale(smaller * 1.3);
-		
-		// Update SVG dimensions
-		svgEcoregions.attr("width", width).attr("height", height);
-		
-		// Redrawing the paths
-		ecoregionPaths.attr("d", path);
+	function colorMap() {
+		g.selectAll("path").select("path")
+			.attr("d", path)
+			
 	};
+	
+	
 	
 	////////// TABLE //////////
 	
@@ -258,9 +237,42 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	console.log(ecoregionMeans[3].date)
 	
+	svgGraph.append("g")
+		.attr("class", "x brush")
+		.call(brush)
+		.selectAll("rect")
+		.attr("y", -6)
+		.attr("height", heightGraph);
+	
 	
 	
 	////////// INTERACTIVITY //////////
+	
+	// Brush for coloring map by calculated averages
+	var xGraphIndex = d3.scale.linear().range([0, ecoregionMeans.length - 1]);
+	brush.on("brush", brushed);
+	
+	function getBound(end) {
+		for(var i = 0; i < ecoregionMeans.length; i++) {
+			if(ecoregionMeans[i].date.toString() == d3.time.day.floor(brush.extent()[end]).toString()) {
+				console.log("found");
+				return i;
+				break;
+			}
+		}
+	}
+	
+	function brushed() {
+		min = getBound(0);
+		max = getBound(1);
+		console.log(brush.extent()[0], brush.extent()[1]);
+		console.log(d3.time.day.floor(brush.extent()[0]), d3.time.day.floor(brush.extent()[1]));
+		console.log(min, max);
+		bindData();
+		drawMap();
+	};
+	
+	console.log(ecoregionMeans)
 	
 	// Ecoregion polygons
 	var ecoregionPaths = svgEcoregions.select("g").selectAll("path");
@@ -311,4 +323,55 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.attr("d", lineGraph);
 		
 	}); // select multiple on keydown not working yet...
+	
+	
+	
+	////////// RESPONSIVENESS //////////
+	
+	// Resize map when window resizes
+	d3.select(window).on('resize', resizeMap);
+	function resizeMap() {
+		// Adjust things when the window size changes
+		width = document.getElementById("map").clientWidth;
+		width = width - margin.left - margin.right;
+		height = document.getElementById("map").clientHeight;
+		
+		// Find the smaller dimension, considering the map ratio
+		var smaller = getsmaller();
+		
+		// Update projection
+		projection
+			.translate([width / 2, height / 2 - 10])
+			.scale(smaller * 1.3);
+		
+		// Update SVG dimensions
+		svgEcoregions.attr("width", width).attr("height", height);
+		
+		// Redrawing the paths
+		ecoregionPaths.attr("d", path);
+	};
+	
+	// Resize graph when window resizes
+	d3.select(window).on('resize', resizeGraph);
+	function resizeGraph() {
+		// Adjust things when the window size changes
+		widthGraph = document.getElementById("graph").clientWidth - marginGraph.left - marginGraph.right;
+		heightGraph = document.getElementById("graph").clientHeight - marginGraph.top - marginGraph.bottom;
+		
+		xGraph.range([0, widthGraph]);
+		yGraph.range([heightGraph, 0]);
+		
+		xAxis.scale(xGraph).orient("bottom");
+		yAxis.scale(yGraph).orient("left");
+
+		lineGraph
+			.x(function(d) { return xGraph(d.date); })
+			.y(heightGraph);
+
+		svgGraph
+			.attr("width", widthGraph + marginGraph.left + marginGraph.right)
+			.attr("height", heightGraph + marginGraph.top + marginGraph.bottom)
+			.append("g")
+			.attr("transform", "translate(" + marginGraph.left + "," + marginGraph.right + ")");
+	};//*/
 };
