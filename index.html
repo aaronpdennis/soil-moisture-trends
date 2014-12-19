@@ -9,15 +9,8 @@
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
 		<script src="http://d3js.org/queue.v1.min.js"></script>
-
-		<script src="javascript/jquery-2.1.1.min.js"></script>
-		<script src="javascript/jquery-ui.min.js"></script>
-
-		<script src="javascript/jQAllRangeSliders-withRuler-min.js"></script>
 		
-		<link rel="stylesheet" href="css/jquery-ui.css" type="text/css"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css"/>
-		<link rel="stylesheet" href="css/classic.css" type="text/css"/>
 		
 		<!--CUSTOM-->
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
@@ -27,16 +20,15 @@
 	<body>
 	
 		
-			<div id="title" class="col-xs-12">
+			<div id="title" class="t">
 				<h1>Soil Moisture by Level 3 Ecoregion</h1>
-				<h3>Change these sliders to update the map...</h3>
 			</div>
 				
 				
-			<div id='map' class="tl">
+			<div id='map' class="ml">
 			</div>
 			
-			<div id='list' class="tr">
+			<div id='list' class="mr">
 				<table class="table table-bordered table-condensed table-striped table-hover">
 					<thead>
 						<th>Ecoregion</th>
@@ -47,7 +39,11 @@
 				</table>
 			</div>
 			
-			<div id="graph" class="b">
+			<div id="dates" class="bl">
+				<h4>Click and drag on graph to calculate average values between dates.</h3>
+			</div>
+			
+			<div id="graph" class="br">
 				<div id="ecoregionName">
 					<h2>Select an ecoregion on the map.</h2>
 				</div>
