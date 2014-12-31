@@ -20,6 +20,7 @@
 .br { position: absolute; top: 75%; left: 35%; right: 0; bottom: 0; }
 
 h1 {
+	font-size: 2em;
 	position: absolute;
 	text-align: left;
 	left: 5%;
@@ -45,14 +46,18 @@ p {
 	color: #555;
 }
 
-#dateMin {
-	position: absolute;
-	left: 5%;
+
+.dateMin {
+	position: relative;
+	top: 40%;
+	left: 15%;
 }
 
-#dateMax {
-	position: absolute;
-	right: 5%;
+
+.dateMax {
+	position: relative;
+	top: 40%;
+	left: 65%;
 }
 
 p.dateText {
