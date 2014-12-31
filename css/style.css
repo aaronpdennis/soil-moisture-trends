@@ -19,15 +19,45 @@
 .bl { position: absolute; top: 75%; left: 0; right: 65%; bottom: 0; }
 .br { position: absolute; top: 75%; left: 35%; right: 0; bottom: 0; }
 
+h1 {
+	position: absolute;
+	text-align: left;
+	left: 5%;
+	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+	color: #000;
+}
+
 h2 { 
 	position: absolute;
 	text-align: right;
-	right: 10%;
+	right: 3%;
 	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
-	font-size: 2.5em;
+	font-size: 1.8em;
 	color: #000;
-	stroke: #000;
 	opacity: 0.3;
+}
+
+p {
+	margin: 2px;
+	text-align: left;
+	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+	font-weight: normal;
+	color: #555;
+}
+
+#dateMin {
+	position: absolute;
+	left: 5%;
+}
+
+#dateMax {
+	position: absolute;
+	right: 5%;
+}
+
+p.dateText {
+	position: absolute;
+	top: 50%;
 }
 
 #map {
@@ -55,7 +85,7 @@ path {
 }
 
 .brush .extent {
-  stroke: #fff;
   fill-opacity: .125;
   shape-rendering: crispEdges;
+  stroke: white;
 }

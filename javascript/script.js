@@ -136,14 +136,14 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			// Pick out the ecoregion we're working with
 			var jsonEcoregion = ecoregions.geometries[j].properties.NA_L3NAME;
 			
-			level += parseFloat(ecoregionMeans[min][jsonEcoregion]);
+			var level = parseFloat(ecoregionMeans[min][jsonEcoregion]);
 			
 			// Our new mean is the sum divided by the range of dates (minus the dates with no data not used in sum), rounded to two decimal places
 			var level = Math.round(level * 100) / 100;
 			
 			// Assign a new value for each ecoregion
 			ecoregions.geometries[j].properties.value = level;
-			}
+		}
 	}
 	
 	
@@ -274,6 +274,12 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 		recolorMap();
 		fillTable();
+		
+		var extentDates = d3.select("#dates");
+		
+		extentDates.select("#minDate").select("p").text(min);
+		
+		extentDates.select("#maxDate").select("p").text(max);
 	}
 	
 	function recolorMap () {
@@ -336,6 +342,10 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.transition()
 			.duration(600)
 			.attr("d", lineGraph);
+		
+		// Highlight row in Table
+		d3.select("#list").select("tbody").selectAll("tr").select("#" + selectedEcoregion).attr("class", "warningd");
+		console.log("#" + selectedEcoregion);
 		
 	}); // select multiple on keydown not working yet...
 	
