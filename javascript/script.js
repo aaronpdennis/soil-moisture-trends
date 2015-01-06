@@ -39,7 +39,7 @@ var colors = ["#FFD6A3", "#FFFFD4", "#B9E8A2", "#7DC9A9", "#2F5E99", "#51468F"]
 
 // Creating color scale
 var color = d3.scale.linear()
-		.domain([6, 10, 12, 14, 20, 30])
+		.domain([6, 9, 12, 15, 20, 30])
 		.range([colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]])
 		.interpolate(d3.interpolateHcl);
 
