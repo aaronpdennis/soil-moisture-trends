@@ -276,10 +276,15 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		fillTable();
 		
 		var extentDates = d3.select("#dates");
-		
-		extentDates.select("#minDate").select("p").text(min);
-		
-		extentDates.select("#maxDate").select("p").text(max);
+    
+    var dateDisplayFormat = d3.time.format("%x");
+    
+    var minExtentDate = d3.time.day.floor(brush.extent()[0]);
+    var maxExtentDate = d3.time.day.floor(brush.extent()[1]);
+        
+		extentDates.select("#minDate").select("p").text(dateDisplayFormat(minExtentDate));
+	
+		extentDates.select("#maxDate").select("p").text(dateDisplayFormat(maxExtentDate));
 	}
 	
 	function recolorMap () {
