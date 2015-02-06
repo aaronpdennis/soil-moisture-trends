@@ -15,9 +15,9 @@
 
 .b { position: absolute; top: 0; left: 0; right: 0; bottom: 10%; }
 .ml { position: absolute; top: 0; left: 0; right: 40%; bottom: 30%; background: gray; }
-.mr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; background: #eee; }
-.bl { position: absolute; top: 70%; left: 0; right: 65%; bottom: 0; }
-.br { position: absolute; top: 70%; left: 35%; right: 0; bottom: 0; }
+.mr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; background: #ddd; }
+.bl { position: absolute; top: 70%; left: 0; right: 65%; bottom: 0; background: #e8e8e8; }
+.br { position: absolute; top: 70%; left: 35%; right: 0; bottom: 0; background: #e8e8e8; }
 
 h1 {
 	font-size: 2em;
