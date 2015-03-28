@@ -199,13 +199,14 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 				.enter().append("td")
 				.text(function(d) { return d; });
         
-         d3.select("tbody").selectAll("tr")
+        d3.select("tbody").selectAll("tr")
             .sort(function(a,b) { 
                 return  d3.descending(a[1], b[1]); 
             })
             .transition();
         
 	};
+
 	
 	////////// GRAPH //////////
     
@@ -275,7 +276,9 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	// Brush for coloring map by calculated averages
 	var xGraphIndex = d3.scale.linear().range([0, ecoregionMeans.length - 1]);
-	brush.on("brush", brushed);
+	brush
+        .on("brush", brushed)
+        .on("brushend", fillTable);
 	
 	function getBound(end) {
 		for(var i = 0; i < ecoregionMeans.length; i++) {
@@ -299,9 +302,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			bindData();
 		}
 		
-		recolorMap();
-		fillTable();
-        
+		recolorMap();        
         
 	}
     
