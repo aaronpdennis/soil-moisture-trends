@@ -82,13 +82,8 @@ queue()
 // Call function to continue after loading data
 function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
-	// Take a look at our data and topology
-	console.log(ecoregionMeans);
-	console.log(ecoregionBoundaries);
-	
 	// Can you say, "geometry collection?"
 	var ecoregions = ecoregionBoundaries.objects.level3ecoregions;
-	console.log(ecoregions.geometries.length);
 	
 	// Min and max indexes of dates for calculations
 	var min = 0;
@@ -196,18 +191,24 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		var tr = d3.select("table").append("tbody").selectAll("tr")
 			.data(array)
 			.enter().append("tr")
-			.attr("id", function(d, i) {return array[i][0];}); // Assigning ecoregion name to id of <tr> 
+			.attr("id", function(d, i) { return array[i][1]; });
 		
 		// Append table data for each value in sub-arrays
 		var td = tr.selectAll("td")
 				.data(function(d) { return d; })
 				.enter().append("td")
 				.text(function(d) { return d; });
+        
+         d3.select("tbody").selectAll("tr")
+            .sort(function(a,b) { 
+                return  d3.descending(a[1], b[1]); 
+            })
+            .transition();
+        
 	};
 	
-	
-	
 	////////// GRAPH //////////
+    
 	ecoregionMeans.forEach(function(d) {
 		d.date = parseDate(d.date);
 	});
@@ -279,7 +280,6 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	function getBound(end) {
 		for(var i = 0; i < ecoregionMeans.length; i++) {
 			if(ecoregionMeans[i].date.toString() === d3.time.day.floor(brush.extent()[end]).toString()) {
-				console.log("found");
 				return i;
 				break;
 			}
@@ -289,9 +289,6 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	function brushed() {
 		min = getBound(0);
 		max = getBound(1);
-        
-        console.log("two dates:");
-        console.log(ecoregionMeans[min].date.toString(), ecoregionMeans[max].date.toString());
         
         $( "#from" ).datepicker( "setDate", ecoregionMeans[min].date);
         $( "#to" ).datepicker( "setDate", ecoregionMeans[max].date );
@@ -312,10 +309,6 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
     function datesChanged() {
         var minDate = $( "#from" ).datepicker( "getDate" );
         var maxDate = $( "#to" ).datepicker( "getDate" );
-        
-        console.log("min and max")
-        console.log(minDate);
-        console.log(maxDate);
         
         brush.extent([minDate, maxDate]);
         brush(d3.select(".brush").transition());
@@ -373,9 +366,14 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		// Get name of clicked on ecoregion
 		var selectedEcoregion = this.id;
 		d3.select("#ecoregionName").select("h2").text(selectedEcoregion);
-		console.log(selectedEcoregion);
 		
-		lineGraph.y(function(d) { return yGraph(d[selectedEcoregion]); });
+		lineGraph.y(function(d) { 
+            if (isNaN(d[selectedEcoregion])) {
+                return 0;
+            } else {
+                return yGraph(d[selectedEcoregion]);
+            };
+        });
 		
 		svgGraph.select(".line")
 			.transition()

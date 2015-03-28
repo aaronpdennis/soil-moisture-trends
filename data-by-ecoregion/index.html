@@ -25,7 +25,7 @@
 	</head>
 	
 	<body>		
-				
+            <div class="t"></div>
 			<div id='map' class="ml">
                 <img id="legend" src="sm-legend.png"/>
 			</div>
@@ -34,19 +34,22 @@
 				<table class="table table-condensed table-striped">
 					<thead>
 						<th>Ecoregion</th>
-						<th>Value</th>
-						<th>Standard Error</th>
+						<th>Percent Moisture Content</th>
 					</thead>
 					<tbody></tbody>
 				</table>
 			</div>
 			
 			<div id="dates" class="bl">
-				<p>Calculate averages over time.</p>
-                <p class="dateLabel">From:</p>
-                <input type="text" id="from" name="from">
-                <p class="dateLabel">To:</p>
-                <input type="text" id="to" name="to">
+                <h3>Average percent soil moisture content</h3>
+                <div class="datesContainer">
+                    <p class="dateLabel">From:</p>
+                    <input type="text" id="from" name="from">
+                </div>
+                <div class="datesContainer">
+                    <p class="dateLabel">To:</p>
+                    <input type="text" id="to" name="to">
+                </div>
 			</div>
 			
 			<div id="graph" class="br">

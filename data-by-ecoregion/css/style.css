@@ -14,10 +14,11 @@
 }
 
 .b { position: absolute; top: 0; left: 0; right: 0; bottom: 10%; }
-.ml { position: absolute; top: 0; left: 0; right: 40%; bottom: 30%; background: gray; }
-.mr { position: absolute; top: 0; left: 60%; right: 0; bottom: 30%; }
-.bl { position: absolute; top: 70%; left: 0; right: 65%; bottom: 0; background: #efefef; }
-.br { position: absolute; top: 70%; left: 35%; right: 0; bottom: 0; background: #efefef; }
+.t { position: absolute; top: 0; left: 0; right: 0; bottom: 93%; background: #000; }
+.ml { position: absolute; top: 7%; left: 0; right: 45%; bottom: 33%; background: gray; }
+.mr { position: absolute; top: 7%; left: 55%; right: 0; bottom: 33%; }
+.bl { position: absolute; top: 67%; left: 0; right: 75%; bottom: 0; background: #efefef; }
+.br { position: absolute; top: 67%; left: 25%; right: 0; bottom: 0; background: #efefef; }
 
 h1 {
 	font-size: 2em;
@@ -38,32 +39,38 @@ h2 {
 	opacity: 0.3;
 }
 
+h3 { 
+	text-align: left;
+	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+	font-size: 1.3em;
+	color: #555;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.2;
+    margin-bottom: 0.4em;
+    margin-top: 0.6em;
+}
+
 p {
 	margin: 2px;
 	text-align: left;
 	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
-	font-weight: normal;
+	font-size: 1em;
 	color: #555;
 }
 
+table { font-size: 0.85em; }
 
-.dateMin {
-	position: absolute;
-	top: 40%;
-	left: 15%;
+.datesContainer { margin-left: auto; margin-right: auto; width: 80%; margin-bottom: 5px; margin-top: 2px; }
+
+.dataLabel {
+	font-size: 1em;
+	font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+	color: #000;
 }
 
-
-.dateMax {
-	position: absolute;
-	top: 40%;
-	left: 65%;
-}
-
-p.dateText {
-	position: absolute;
-	top: 50%;
-}
+input { width: 7em; }
 
 #map {
 	padding: 10px;
