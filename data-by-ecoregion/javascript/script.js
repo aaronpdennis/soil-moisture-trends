@@ -191,7 +191,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		var tr = d3.select("table").append("tbody").selectAll("tr")
 			.data(array)
 			.enter().append("tr")
-			.attr("id", function(d, i) { return array[i][1]; });
+			.attr("id", function(d, i) { return array[i][0]; });
 		
 		// Append table data for each value in sub-arrays
 		var td = tr.selectAll("td")
@@ -202,9 +202,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
         d3.select("tbody").selectAll("tr")
             .sort(function(a,b) { 
                 return  d3.descending(a[1], b[1]); 
-            })
-            .transition();
-        
+            });        
 	};
 
 	
@@ -382,7 +380,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.attr("d", lineGraph);
 		
 		// Highlight row in Table
-		d3.select("#list").select("tbody").selectAll("tr").select("#" + selectedEcoregion).attr("class", "warningd");
+		d3.select("#list").select("tbody").selectAll("tr").select("#" + selectedEcoregion).attr("class", "warning");
 		console.log("#" + selectedEcoregion);
 		
 	}); // select multiple on keydown not working yet...
