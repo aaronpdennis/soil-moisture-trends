@@ -228,9 +228,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		.datum(ecoregionMeans)
 		.attr("class", "line")
 		.attr("d", lineGraph);
-	
-	console.log(ecoregionMeans[3].date)
-	
+		
 	svgGraph.append("g")
 		.attr("class", "x brush")
 		.call(brush)
@@ -307,6 +305,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		recolorMap();
 		fillTable();
         
+        
 	}
     
     
@@ -319,8 +318,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
         console.log(maxDate);
         
         brush.extent([minDate, maxDate]);
-        svgGraph.call(brush);
-        brushed();
+        brush(d3.select(".brush").transition());
     }
 
 	function recolorMap () {
