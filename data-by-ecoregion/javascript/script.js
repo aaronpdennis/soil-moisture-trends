@@ -239,7 +239,36 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		.attr("height", heightGraph);
 	
 	
-	
+	////////// DATE PICKER //////////
+    
+    $(function() {
+            $( "#from" ).datepicker({
+                dateFormat: "M d, yy",
+                defaultDate: "Jun 25, 2002",
+                minDate: "Jun 25, 2002",
+                maxDate: "Sep 26, 2011",
+                changeMonth: true,
+                changeYear: true,
+                onClose: function( selectedDate ) {
+                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
+                },
+                onSelect: datesChanged
+            });
+            $( "#to" ).datepicker({
+                dateFormat: "M d, yy",
+                defaultDate: "Sep 26, 2011",
+                minDate: "Jun 25, 2002",
+                maxDate: "Sep 26, 2011",
+                changeMonth: true,
+                changeYear: true,
+                onClose: function( selectedDate ) {
+                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+                },
+                onSelect: datesChanged
+            });
+    });
+    
+    
 	////////// INTERACTIVITY //////////
 	
 	// Ecoregion polygons
@@ -251,7 +280,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	function getBound(end) {
 		for(var i = 0; i < ecoregionMeans.length; i++) {
-			if(ecoregionMeans[i].date.toString() == d3.time.day.floor(brush.extent()[end]).toString()) {
+			if(ecoregionMeans[i].date.toString() === d3.time.day.floor(brush.extent()[end]).toString()) {
 				console.log("found");
 				return i;
 				break;
@@ -262,9 +291,12 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	function brushed() {
 		min = getBound(0);
 		max = getBound(1);
-		console.log(brush.extent()[0], brush.extent()[1]);
-		console.log(d3.time.day.floor(brush.extent()[0]), d3.time.day.floor(brush.extent()[1]));
-		console.log(min, max);
+        
+        console.log("two dates:");
+        console.log(ecoregionMeans[min].date.toString(), ecoregionMeans[max].date.toString());
+        
+        $( "#from" ).datepicker( "setDate", ecoregionMeans[min].date);
+        $( "#to" ).datepicker( "setDate", ecoregionMeans[max].date );
 		
 		if (min == max) {
 			bindSingleDayData();
@@ -274,19 +306,23 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		
 		recolorMap();
 		fillTable();
-		
-		var extentDates = d3.select("#dates");
-    
-    var dateDisplayFormat = d3.time.format("%x");
-    
-    var minExtentDate = d3.time.day.floor(brush.extent()[0]);
-    var maxExtentDate = d3.time.day.floor(brush.extent()[1]);
         
-		extentDates.select("#minDate").select("p").text(dateDisplayFormat(minExtentDate));
-	
-		extentDates.select("#maxDate").select("p").text(dateDisplayFormat(maxExtentDate));
 	}
-	
+    
+    
+    function datesChanged() {
+        var minDate = $( "#from" ).datepicker( "getDate" );
+        var maxDate = $( "#to" ).datepicker( "getDate" );
+        
+        console.log("min and max")
+        console.log(minDate);
+        console.log(maxDate);
+        
+        brush.extent([minDate, maxDate]);
+        svgGraph.call(brush);
+        brushed();
+    }
+
 	function recolorMap () {
 			ecoregionPaths
 					.transition()

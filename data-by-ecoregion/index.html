@@ -6,6 +6,13 @@
 		<title>Soil Moisture</title>
 		
 		<!--LIBRARIES-->
+      
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+      
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="css/jquery-ui-1.10.3.theme.css" />
+        
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
 		<script src="http://d3js.org/queue.v1.min.js"></script>
@@ -20,11 +27,11 @@
 	<body>		
 				
 			<div id='map' class="ml">
-        <img id="legend" src="sm-legend.png"/>
+                <img id="legend" src="sm-legend.png"/>
 			</div>
 			
 			<div id='list' class="mr">
-				<table class="table">
+				<table class="table table-condensed table-striped">
 					<thead>
 						<th>Ecoregion</th>
 						<th>Value</th>
@@ -35,13 +42,11 @@
 			</div>
 			
 			<div id="dates" class="bl">
-				<p>Click and drag on graph to calculate average values between dates.</p>
-				<div id="minDate" class="dateMin">
-					<p class="dateText"></p>
-				</div>
-				<div id="maxDate" class="dateMax">
-					<p class="dateText"></p>
-				</div>
+				<p>Calculate averages over time.</p>
+                <p class="dateLabel">From:</p>
+                <input type="text" id="from" name="from">
+                <p class="dateLabel">To:</p>
+                <input type="text" id="to" name="to">
 			</div>
 			
 			<div id="graph" class="br">
