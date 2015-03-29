@@ -14,11 +14,11 @@
 }
 
 .b { position: absolute; top: 0; left: 0; right: 0; bottom: 10%; }
-.t { position: absolute; top: 0; left: 0; right: 0; bottom: 93%; background: #000; }
-.ml { position: absolute; top: 7%; left: 0; right: 45%; bottom: 33%; background: gray; }
-.mr { position: absolute; top: 7%; left: 55%; right: 0; bottom: 33%; }
-.bl { position: absolute; top: 67%; left: 0; right: 75%; bottom: 0; background: #efefef; }
-.br { position: absolute; top: 67%; left: 25%; right: 0; bottom: 0; background: #efefef; }
+.t { position: absolute; top: 0; left: 0; right: 0; bottom: 100%; background: #000; }
+.ml { position: absolute; top: 0%; left: 0; right: 45%; bottom: 40%; background: gray; }
+.mr { position: absolute; top: 0%; left: 55%; right: 0; bottom: 40%; }
+.bl { position: absolute; top: 60%; left: 0; right: 80%; bottom: 0; background: #efefef; }
+.br { position: absolute; top: 60%; left: 20%; right: 0; bottom: 0; background: #efefef; }
 
 h1 {
 	font-size: 2em;
@@ -60,7 +60,8 @@ p {
 	color: #555;
 }
 
-table { font-size: 0.85em; }
+table { font-size: 0.85em; color: #555; }
+.selectedRow { color: #CC00BA; }
 
 .datesContainer { margin-left: auto; margin-right: auto; width: 80%; margin-bottom: 5px; margin-top: 2px; }
 

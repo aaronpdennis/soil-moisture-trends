@@ -202,8 +202,13 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
         d3.select("tbody").selectAll("tr")
             .sort(function(a,b) { 
                 return  d3.descending(a[1], b[1]); 
-            });        
-	};
+            });
+        
+        // Highlight row in Table
+        if (typeof selectedEcoregion !== 'undefined') {
+            $("[id='" + selectedEcoregion + "']").addClass("selectedRow");
+         };
+    };
 
 	
 	////////// GRAPH //////////
@@ -349,7 +354,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 	
 	// On click, class the clicked on ecoregion as .selected, highlight it, move it to the top
 	ecoregionPaths.on("click", function() {
-		
+		console.log(this);
 		if (keydown == false) {
 			ecoregionPaths.classed("selected", false);
 			d3.select(this).classed("selected", true);
@@ -363,7 +368,7 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 		selectedEcoregionElement[0].parentNode.appendChild(selectedEcoregionElement[0]);
 		
 		// Get name of clicked on ecoregion
-		var selectedEcoregion = this.id;
+		selectedEcoregion = this.id;
 		d3.select("#ecoregionName").select("h2").text(selectedEcoregion);
 		
 		lineGraph.y(function(d) { 
@@ -378,15 +383,26 @@ function ready(error, ecoregionMeans, ecoregionBoundaries) {
 			.transition()
 			.duration(600)
 			.attr("d", lineGraph);
-		
-		// Highlight row in Table
-		d3.select("#list").select("tbody").selectAll("tr").select("#" + selectedEcoregion).attr("class", "warning");
-		console.log("#" + selectedEcoregion);
+        
+        // Highlight row in Table
+        $("tr").removeClass("selectedRow");
+        $("[id='" + selectedEcoregion + "']").addClass("selectedRow");
 		
 	}); // select multiple on keydown not working yet...
 	
-	
-	
+    /*
+	d3.select("tbody").selectAll("tr")
+        .on("click", function() {
+            console.log("hi");
+            var clickedEcoregionRow = this.id;
+            console.log(clickedEcoregionRow);
+            $("g[id='" + clickedEcoregionRow + "']").trigger("click");
+        })
+        .on("mouseover", function() {
+            console.log("hovered");
+        });
+	*/
+    
 	////////// RESPONSIVENESS //////////
 	
 	// Resize map when window resizes
